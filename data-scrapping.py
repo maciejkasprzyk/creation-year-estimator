@@ -4,21 +4,77 @@ print()
 
 url = "https://wolnelektury.pl/api/books/studnia-i-wahadlo/"
 
-response_book = requests.get(url)
-data_book = response_book.text
-parsed_book = json.loads(data_book)
 
-# print(json.dumps(parsed, indent=4))
+# ================== info scrapping =====================
 
-title = parsed_book["title"]
-author = parsed_book["authors"][0]["name"]
-epoch = parsed_book["epochs"][0]["name"]
-txt_url = parsed_book["txt"]
+response_book_info = requests.get(url)
+data_book_info = response_book_info.text
+parsed_book_info = json.loads(data_book_info)
 
-print(title)
-print(author)
-print(epoch)
-# print(txt_url)
+# print(json.dumps(parsed_book_info, indent=4))
+
+title = parsed_book_info["title"]
+author = parsed_book_info["authors"][0]["name"]
+author_url = parsed_book_info["authors"][0]["href"]
+epoch = parsed_book_info["epochs"][0]["name"]
+txt_url = parsed_book_info["txt"]
+
+print("Title:\t", title)
+print("Author:\t", author)
+print("Epoch:\t", epoch)
+
+
+# ================== author info scrapping =============
+
+response_author_info = requests.get(author_url)
+data_author_info = response_author_info.text
+parsed_author_info = json.loads(data_author_info)
+
+author_description_ugly = parsed_author_info["description"]
+
+born_date_sign = "Ur."
+date_start_sign = "<dd>"
+date_end_sign = "<br>"
+born_date_area_start_position = author_description_ugly.find(born_date_sign)
+
+if born_date_area_start_position != -1:
+
+    born_date_start_position = \
+        author_description_ugly[born_date_area_start_position:].find(date_start_sign) \
+        + born_date_area_start_position \
+        + len(date_start_sign) \
+        + 1
+
+    born_date_length = author_description_ugly[born_date_start_position:].find(date_end_sign)
+    born_date = author_description_ugly[born_date_start_position:born_date_start_position + born_date_length]
+
+else:
+    pass                            # TODO find born data on wikipedia
+
+print("Born:\t", born_date)         # TODO extract pure date only
+
+
+death_date_sign = "Zm."
+death_date_area_start_position = author_description_ugly.find(death_date_sign)
+
+if death_date_area_start_position != -1:
+
+    death_date_start_position = \
+        author_description_ugly[death_date_area_start_position:].find(date_start_sign) \
+        + death_date_area_start_position \
+        + len(date_start_sign) \
+        + 1
+
+    death_date_end_length = author_description_ugly[death_date_start_position:].find(date_end_sign)
+    death_date = author_description_ugly[death_date_start_position:death_date_start_position + death_date_end_length]
+
+else:
+    pass                            # TODO find death data on wikipedia
+
+print("Died:\t", death_date)        # TODO extract pure date only
+
+
+# ================== txt scrapping =====================
 
 response_txt = requests.get(txt_url)
 data_txt = response_txt.text
@@ -40,5 +96,5 @@ if header_last_position != -1:
 else:
     book_pure_txt = book_without_footer
 
-print(book_pure_txt)
+print("Txt fragment:\t", book_pure_txt[:600])
 
