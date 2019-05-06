@@ -1,6 +1,5 @@
 import requests
 import json
-import re
 from date_parser_pl import *
 
 
@@ -73,7 +72,9 @@ if death_date_area_start_position != -1:
         + 1
 
     death_date_end_length = author_description_ugly[death_date_start_position:].find(date_end_sign)
-    death_date_raw = author_description_ugly[death_date_start_position:death_date_start_position + death_date_end_length]
+    death_date_raw = author_description_ugly[
+                        death_date_start_position: death_date_start_position + death_date_end_length
+                     ]
 
     # exclude death location
     year_end_position = re.search(r"\b[1-2][0-9]{3}\b", death_date_raw).end()
