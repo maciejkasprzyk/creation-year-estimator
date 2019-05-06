@@ -2,6 +2,8 @@ import requests
 import json
 print()
 
+# TODO automate looking for all books at once -> https://wolnelektury.pl/api/books/
+
 url = "https://wolnelektury.pl/api/books/studnia-i-wahadlo/"
 # url = "https://wolnelektury.pl/api/books/pan-tadeusz/"
 # url = "https://wolnelektury.pl/api/books/a-co-wam-spiewac/"     # TODO lyric need to be treated differently to epic
@@ -19,10 +21,6 @@ author = parsed_book_info["authors"][0]["name"]
 author_url = parsed_book_info["authors"][0]["href"]
 epoch = parsed_book_info["epochs"][0]["name"]
 txt_url = parsed_book_info["txt"]
-
-print("Title:\t", title)
-print("Author:\t", author)
-print("Epoch:\t", epoch)
 
 
 # ================== author info scrapping =============
@@ -52,8 +50,6 @@ if born_date_area_start_position != -1:
 else:
     pass                            # TODO find born data on wikipedia
 
-print("Born:\t", born_date)         # TODO extract pure date only
-
 
 death_date_sign = "Zm."
 death_date_area_start_position = author_description_ugly.find(death_date_sign)
@@ -71,8 +67,6 @@ if death_date_area_start_position != -1:
 
 else:
     pass                            # TODO find death data on wikipedia
-
-print("Died:\t", death_date)        # TODO extract pure date only
 
 
 # ================== txt scrapping =====================
@@ -97,5 +91,14 @@ if header_last_position != -1:
 else:
     book_pure_txt = book_without_footer
 
+
+# ================== output ===========================
+
+print("Title:\t", title)
+print("Author:\t", author)
+print("Epoch:\t", epoch)
+print("Born:\t", born_date)                     # TODO extract pure date only
+print("Died:\t", death_date)                    # TODO extract pure date only
 print("Txt fragment:\t", book_pure_txt[:600])
+
 
