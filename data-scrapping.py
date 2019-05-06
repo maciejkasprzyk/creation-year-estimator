@@ -3,7 +3,8 @@ import json
 print()
 
 url = "https://wolnelektury.pl/api/books/studnia-i-wahadlo/"
-
+# url = "https://wolnelektury.pl/api/books/pan-tadeusz/"
+# url = "https://wolnelektury.pl/api/books/a-co-wam-spiewac/"     # TODO lyric need to be treated differently to epic
 
 # ================== info scrapping =====================
 
