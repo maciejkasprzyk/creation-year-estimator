@@ -1,5 +1,6 @@
 import requests
 import json
+import numpy
 from date_parser_pl import *
 
 
@@ -124,4 +125,29 @@ def get_data_for_book_url(book_url):
     print("Txt fragment:\n\n", book_pure_txt[:800])
 
 
-get_data_for_book_url(url)
+def save_book_list():
+    """
+    Gets full list of books stored on wolnelektury.pl and saves into txt file
+    :return: -
+    """
+    book_list = "https://wolnelektury.pl/api/books/"
+
+    response_book_list = requests.get(book_list)
+    data_book_list = response_book_list.text
+    parsed_book_list = json.loads(data_book_list)
+
+    url_list = [book["href"] for book in parsed_book_list]
+
+    with open('url_list.txt', 'w') as file:
+        for url in url_list:
+            file.write("%s\n" % url)
+
+
+def get_data_for_all_books():
+    """
+    Gets data for all books listed in file: url_list.txt
+    :return: -
+    """
+
+
+save_book_list()
