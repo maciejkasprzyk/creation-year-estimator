@@ -52,7 +52,7 @@ if birth_date_area_start_position != -1:
     birth_date_raw = author_description_ugly[birth_date_start_position:birth_date_start_position + birth_date_length]
 
     # exclude birth location
-    year_end_position = re.search(r"\b[1-2][0-9]{3}\b", birth_date_raw).end()
+    year_end_position = re.search(r"\b[1-2]?[0-9]{3}\b", birth_date_raw).end()
     birth_date_str = birth_date_raw[:year_end_position]
 
     birth_date = date_parse(birth_date_str)
@@ -78,7 +78,7 @@ if death_date_area_start_position != -1:
                      ]
 
     # exclude death location
-    year_end_position = re.search(r"\b[1-2][0-9]{3}\b", death_date_raw).end()
+    year_end_position = re.search(r"\b[1-2]?[0-9]{3}\b", death_date_raw).end()
     death_date_str = death_date_raw[:year_end_position]
 
     death_date = date_parse(death_date_str)
