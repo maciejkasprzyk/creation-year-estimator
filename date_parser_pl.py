@@ -69,7 +69,7 @@ def date_parse(date_raw):
         return None
 
     # extract year
-    regex_year = re.search(r"\b[1-2][0-9]{3}\b", date_raw)
+    regex_year = re.search(r"\b[1-2]?[0-9]{3}\b", date_raw)
     if regex_year is not None:
         year = regex_year.group()
     else:
