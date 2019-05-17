@@ -58,7 +58,8 @@ def get_data_for_book_url(book_url):
                 + 1
 
             birth_date_length = author_description_ugly[birth_date_start_position:].find(date_end_sign)
-            birth_date_raw = author_description_ugly[birth_date_start_position:birth_date_start_position + birth_date_length]
+            birth_date_raw = author_description_ugly[
+                             birth_date_start_position:birth_date_start_position + birth_date_length]
 
             # exclude birth location
             year_end_position = re.search(r"\b[1-2]?[0-9]{3}\b", birth_date_raw).end()
@@ -82,7 +83,7 @@ def get_data_for_book_url(book_url):
 
             death_date_end_length = author_description_ugly[death_date_start_position:].find(date_end_sign)
             death_date_raw = author_description_ugly[
-                                death_date_start_position: death_date_start_position + death_date_end_length
+                             death_date_start_position: death_date_start_position + death_date_end_length
                              ]
 
             # exclude death location
@@ -152,7 +153,7 @@ def get_data_for_book_url(book_url):
         "birth_date": birth_date,
         "death_date": death_date,
         "txt": book_pure_txt
-        }
+    }
 
     return data_dictionary
 
@@ -165,9 +166,10 @@ def save_book_list():
     book_list = "https://wolnelektury.pl/api/books/"
 
     response_book_list = requests.get(book_list)
+    # it returns json with general info about all books
     data_book_list = response_book_list.text
     parsed_book_list = json.loads(data_book_list)
-
+    # all we need is book url
     url_list = [book["href"] for book in parsed_book_list]
 
     with open('url_list.txt', 'w') as file:
@@ -187,15 +189,15 @@ def save_data_for_books(book_count=-1):
         book_list = file.readlines()
 
     data = []
-    do_for_all = False
 
     if book_count == 0:
         return
     elif book_count < 0:
-        do_for_all = True
+        book_count = len(book_list)
 
     for i, url in enumerate(book_list):
-        if i >= book_count and not do_for_all:
+
+        if not i < book_count:
             break
         book_data = get_data_for_book_url(url)
 
@@ -203,7 +205,10 @@ def save_data_for_books(book_count=-1):
         if book_data["txt"] is not None:
             data.append(book_data)
         else:
-            book_count += 1                                             # save one book more if omitted book without txt
+            book_count += 1  # save one book more if omitted book without txt
+
+        print(f'{book_data["title"]}')
+        print(f"downloaded {i + 1} of {book_count} books")
 
     with open('data.json', 'w') as file:
         json.dump(data, file)
@@ -219,22 +224,24 @@ def read_saved_data():
         data = json.load(file)
 
     for book in data:
-        print("\n\n", "-"*30)
+        print("\n\n", "-" * 30)
         print("Title:\t", book["title"])
         print("Kind:\t", book["kind"])
         print("Epoch:\t", book["epoch"])
         print("Author:\t", book["author"])
         print("Born:\t", book["birth_date"])
         print("Died:\t", book["death_date"])
-        print("Txt fragment:\n\n", book["txt"][:500])
+        # print("Txt fragment:\n\n", book["txt"][:500])
 
 
-# start = time.time()
-#
-# save_data_for_books(20)     # now it loads only 20 books                # TODO do it for all books
-#
-# end = time.time()
-# print("\n", end - start)
+def main():
+    start = time.time()
+    save_data_for_books(100)
+    end = time.time()
+    print("\n", end - start)
+
+    # read_saved_data()
 
 
-read_saved_data()
+if __name__ == '__main__':
+    main()
