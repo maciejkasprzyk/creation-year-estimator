@@ -27,7 +27,7 @@ def get_info_for_book(book_url):
     """
     Function get data for given book from wolnelektury.pl
     :param book_url: Link to certain book via API on website: wolnelektury.pl
-    :return: scrapped data in dictionary structure
+    :return: data in dictionary structure
     """
 
     response_book_info = requests.get(book_url)
@@ -39,7 +39,7 @@ def get_info_for_book(book_url):
 
 def save_data_for_books(book_count=-1):
     """
-    Gets data for given number of books listed in file: url_list.txt and saves it in books_info.json file.
+    Gets data for given number of books listed in file: url_list.txt and saves it in a file.
     When given count < 0 then function loads all books available
     :return: -
     """
@@ -67,6 +67,7 @@ def save_data_for_books(book_count=-1):
 
 
 def save_data_for_authors():
+    """Iterate over json books info file and download data for all authors"""
     authors_info = {}
 
     with open(books_info_path, 'r') as file:
@@ -92,6 +93,7 @@ def save_data_for_authors():
 
 
 def save_texts():
+    """Iterate over json books info file and download all texts"""
     with open(books_info_path, 'r') as file:
         books_data = json.load(file)
 

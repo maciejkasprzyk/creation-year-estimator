@@ -4,7 +4,8 @@ from paths import *
 
 
 def construct_list_of_books():
-    """This function construct list of books from json files"""
+    """This function construct list of books from json files.
+    By json files I means: file with books info, authors info and books texts"""
 
     with open(books_info_path, 'r') as file:
         books_data_raw = json.load(file)
