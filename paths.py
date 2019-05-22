@@ -1,0 +1,5 @@
+books_urls_list_path = 'data/url_list.txt'
+books_info_path = 'data/books_info.json'
+authors_info_ready_path = 'data/authors_info_ready.json'
+authors_info_raw_path = 'data/authors_info_raw.json'
+books_texts_path = 'data/books_text.json'
