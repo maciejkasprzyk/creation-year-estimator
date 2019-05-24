@@ -30,14 +30,17 @@ def construct_list_of_books():
         death_year = authors_data[author]["death_year"]
 
         if birth_year is None and death_year is None:
-            print("There's no date for book", title)
+            # print("There's no date for book", title)
             date = None
+            continue  # dont append when no text
         elif birth_year is not None and death_year is not None:
             date = (birth_year + death_year) // 2
         elif birth_year is not None:
             date = birth_year + 25
-        else:  # death_year is not None
+        elif death_year is not None:
             date = death_year - 20
+        else:
+            continue
 
         books_list.append(Book(title, author, epoch, genre, kind, date, txt))
 
