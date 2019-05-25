@@ -61,6 +61,7 @@ class Book:
 
     def __str__(self):
         result = ""
+        result += "=" * 50 + "\n"
         result += self.title + "\n"
         result += self.author + "\n"
         result += self.epoch + "\n"
@@ -73,8 +74,8 @@ class Book:
 
 def main():
     books = construct_list_of_books()
-    # for i in range(5):
-    #     print(str(books[i]))
+    for i in range(5):
+        print(str(books[i]))
 
 
 if __name__ == '__main__':
