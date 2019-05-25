@@ -21,7 +21,7 @@ def lemmatize(word_vector):
     return lemmatized_words
 
 
-def vectorize_simple(txt):
+def tokenize(txt):
     """
     Returns a vector of words out of raw text.
     Simple, hand made version.
@@ -80,7 +80,7 @@ def vectorize_simple(txt):
 def main():
     books = construct_list_of_books()
     txt = books[77].text
-    words_vector = vectorize_simple(txt)
+    words_vector = tokenize(txt)
     lemmatized = lemmatize(words_vector)
 
     lemmatized_count = 0
