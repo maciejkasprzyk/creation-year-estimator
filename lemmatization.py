@@ -15,8 +15,16 @@ def lemmatize(word_vector):
     lemmatized_words = []
 
     for word in word_vector:
-        analysis = morf.analyse(word)
-        lemmatized_words.append(analysis[0][2][1])    # pseudo-heuristic applied for choosing right lemma
+        if word is not None and word != "" and word != " ":
+            analysis = morf.analyse(word)
+            lemma = analysis[0][2][1]
+            if str(lemma).__contains__("_"):
+                lemma = word
+            lemmatized_words.append(lemma)    # pseudo-heuristic applied for choosing right lemma
+
+        else:
+            lemma = word
+            lemmatized_words.append(lemma)
 
     return lemmatized_words
 
@@ -79,12 +87,12 @@ def tokenize(txt):
 
 def main():
     books = construct_list_of_books()
-    txt = books[77].text
+    txt = books[718].text
     words_vector = tokenize(txt)
     lemmatized = lemmatize(words_vector)
 
     lemmatized_count = 0
-    words_count = 100
+    words_count = 1000000
     if words_count > words_vector.__len__():
         words_count = words_vector.__len__()
 
