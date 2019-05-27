@@ -9,7 +9,7 @@ from sklearn.svm import SVC
 
 import paths
 from book import construct_list_of_books
-
+import json
 
 def main():
     print("constructing list of books...")
@@ -17,6 +17,11 @@ def main():
 
     texts_list = [book.text for book in books]
     labels = [book.label for book in books]
+
+    # texts_list = [book.text for book in books]
+
+    with open('data/preprocessed_texts.json', 'r') as file:
+        texts_list = json.load(file)
 
     pipeline = Pipeline([("tfidf", TfidfVectorizer()),
                          ("svm", SVC(kernel="linear"))])
