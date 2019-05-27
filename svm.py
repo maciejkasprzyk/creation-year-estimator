@@ -9,6 +9,7 @@ from sklearn.svm import SVC
 
 import paths
 from book import construct_list_of_books
+import json
 
 
 def prepare_class_labels_vector(books):
@@ -16,11 +17,7 @@ def prepare_class_labels_vector(books):
     for book in books:
         epoch = book.epoch
 
-        if epoch == "Starożytność" or epoch == "Średniowiecze":
-            labels.append("Starożytność lub średniowiecze")
-        # elif epoch == "Średniowiecze":
-        #     labels.append("Średniowiecze")
-        elif epoch == "Pozytywizm":
+        if epoch == "Pozytywizm":
             labels.append("Pozytywizm")
         elif epoch == "Romantyzm":
             labels.append("Romantyzm")
@@ -30,8 +27,12 @@ def prepare_class_labels_vector(books):
             labels.append("Współczesność")
         elif epoch == "Oświecenie":
             labels.append("Oświecenie")
+        elif epoch == "Starożytność":
+            labels.append("Starożytność")
         elif epoch == "Dwudziestolecie międzywojenne":
             labels.append("Dwudziestolecie międzywojenne")
+        elif epoch == "Średniowiecze":
+            labels.append("Średniowiecze")
         elif epoch == "Renesans":
             labels.append("Renesans")
         elif epoch == "Barok":
@@ -45,9 +46,12 @@ def prepare_class_labels_vector(books):
 def main():
     print("constructing list of books...")
     books = construct_list_of_books()
-
-    texts_list = [book.text for book in books]
     labels = prepare_class_labels_vector(books)
+
+    # texts_list = [book.text for book in books]
+
+    with open('data/preprocessed_texts.json', 'r') as file:
+        texts_list = json.load(file)
 
     pipeline = Pipeline([("tfidf", TfidfVectorizer()),
                          ("svm", SVC(kernel="linear"))])
@@ -90,7 +94,7 @@ def main():
         print("\t%s: %r" % (param_name, best_parameters[param_name]))
 
     y_pred = grid_search.predict(x_test)
-    # todo wypisać ile jest poprawnych oszacowań
+    print("Test results: " + str(grid_search.score(x_test, y_pred)) )
 
     # wiem ze tutaj moglem to zapisac do jednego pliku jako tuple, moze zmienie xd
     with open(paths.last_grid_search_path, "wb"):

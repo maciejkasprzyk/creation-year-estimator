@@ -55,6 +55,7 @@ def tokenize(txt):
         u'—',
         u'-',
         u'.',
+        u'°',
         u'…',
         u',',
         u';',
@@ -74,7 +75,7 @@ def tokenize(txt):
 
         elif letter in separator:
             if word.__len__() > 0:
-                words_vector.append(word)
+                words_vector.append(word.lower())
             word = ""
 
         else:
