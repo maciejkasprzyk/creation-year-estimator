@@ -1,14 +1,12 @@
+import collections
 import pickle
 
-from book import *
-import csv
-import numpy as np
 import matplotlib.pyplot as plt
-
-from sklearn import svm, datasets
-from sklearn.model_selection import train_test_split
+import numpy as np
 from sklearn.metrics import confusion_matrix
-from sklearn.utils.multiclass import unique_labels
+
+import book as bk
+import paths
 
 
 def plot_confusion_matrix(y_true, y_pred, classes,
@@ -27,8 +25,7 @@ def plot_confusion_matrix(y_true, y_pred, classes,
 
     # Compute confusion matrix
     cm = confusion_matrix(y_true, y_pred)
-    # Only use the labels that appear in the data
-    classes = classes[unique_labels(y_true, y_pred)]
+
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
         print("Normalized confusion matrix")
@@ -37,7 +34,7 @@ def plot_confusion_matrix(y_true, y_pred, classes,
 
     print(cm)
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(10, 10))
     im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
     ax.figure.colorbar(im, ax=ax)
     # We want to show all ticks...
@@ -66,7 +63,7 @@ def plot_confusion_matrix(y_true, y_pred, classes,
 
 
 def print_all_epochs():
-    books = construct_list_of_books()
+    books = bk.construct_list_of_books()
     data = []
 
     for item in books:
@@ -76,15 +73,41 @@ def print_all_epochs():
 
 
 def print_confusion_matrix():
-    pass
-    # todo wczytac grid search i dane testowe
-    # y_pred = grid_search.predict(x_test)
-    # todo przygotować classes jako liste labelów w kolejności chronologicznej epok
+    with open(paths.best_gird_search_path, "rb") as file:
+        grid_search, x_test, x_train, y_test, y_train = pickle.load(file)
+
+    y_pred = grid_search.predict(x_test)
+
+    class_names = ["Starożytność lub średniowiecze", "Renesans", "Barok", "Oświecenie", "Romantyzm", "Pozytywizm",
+                   "Modernizm", "Dwudziestolecie międzywojenne", "Współczesność", "other"]
+
+    np.set_printoptions(precision=2)
+
+    # Plot non-normalized confusion matrix
+    plot_confusion_matrix(y_test, y_pred, classes=class_names,
+                          title='Confusion matrix, without normalization')
+
+    # Plot normalized confusion matrix
+    plot_confusion_matrix(y_test, y_pred, classes=class_names, normalize=True,
+                          title='Normalized confusion matrix')
+
+    plt.show()
+
+
+def count_books_by_epochs():
+    books = bk.construct_list_of_books()
+    epochs = [book.epoch for book in books]
+    counter = collections.Counter(epochs)
+    from pprint import pprint
+    pprint(counter)
+
 
 def main():
-    pass
+    # print_all_epochs()
 
     # print_confusion_matrix()
+
+    count_books_by_epochs()
 
 
 if __name__ == '__main__':

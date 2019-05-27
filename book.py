@@ -71,11 +71,42 @@ class Book:
         result += self.text[:100] + "\n"
         return result
 
+    @property
+    def label(self):
+
+        epoch = self.epoch
+
+        if epoch == "Starożytność" or epoch == "Średniowiecze":
+            return "Starożytność lub średniowiecze"
+        # elif epoch == "Średniowiecze":
+        #     labels.append("Średniowiecze")
+        elif epoch == "Pozytywizm":
+            return "Pozytywizm"
+        elif epoch == "Romantyzm":
+            return "Romantyzm"
+        elif epoch == "Modernizm":
+            return "Modernizm"
+        elif epoch == "Współczesność":
+            return "Współczesność"
+        elif epoch == "Oświecenie" or epoch == "OÅ›wiecenie":
+            return "Oświecenie"
+        elif epoch == "Dwudziestolecie międzywojenne" or epoch == "Dwudziestolecie miÄ™dzywojenne":
+            return "Dwudziestolecie międzywojenne"
+        elif epoch == "Renesans":
+            return "Renesans"
+        elif epoch == "Barok":
+            return "Barok"
+        elif epoch == "nie dotyczy":
+            return "nie dotyczy"
+        else:
+            return "other"
+
 
 def main():
     books = construct_list_of_books()
-    for i in range(5):
-        print(str(books[i]))
+    for book in books:
+        if book.label == 'nie dotyczy' or book.label == "other":
+            print(book.epoch, book.title)
 
 
 if __name__ == '__main__':
