@@ -24,7 +24,7 @@ def plot_confusion_matrix(y_true, y_pred, classes,
             title = 'Confusion matrix, without normalization'
 
     # Compute confusion matrix
-    cm = confusion_matrix(y_true, y_pred)
+    cm = confusion_matrix(y_true, y_pred, labels=classes)
 
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
@@ -43,8 +43,8 @@ def plot_confusion_matrix(y_true, y_pred, classes,
            # ... and label them with the respective list entries
            xticklabels=classes, yticklabels=classes,
            title=title,
-           ylabel='True label',
-           xlabel='Predicted label')
+           ylabel='Predicted label',
+           xlabel='True label')
 
     # Rotate the tick labels and set their alignment.
     plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
@@ -73,13 +73,17 @@ def print_all_epochs():
 
 
 def print_confusion_matrix():
-    with open(paths.best_gird_search_path, "rb") as file:
+    with open(paths.stats_gird_search_path, "rb") as file:
         grid_search, x_test, x_train, y_test, y_train = pickle.load(file)
 
     y_pred = grid_search.predict(x_test)
 
+    counter = collections.Counter(y_pred)
+    from pprint import pprint
+    pprint(counter)
+
     class_names = ["Starożytność lub średniowiecze", "Renesans", "Barok", "Oświecenie", "Romantyzm", "Pozytywizm",
-                   "Modernizm", "Dwudziestolecie międzywojenne", "Współczesność", "other"]
+                   "Modernizm", "Dwudziestolecie międzywojenne", "Współczesność", "nie dotyczy"]
 
     np.set_printoptions(precision=2)
 
@@ -96,8 +100,20 @@ def print_confusion_matrix():
 
 def count_books_by_epochs():
     books = bk.construct_list_of_books()
-    epochs = [book.epoch for book in books]
-    counter = collections.Counter(epochs)
+    epochs = [book.label for book in books]
+    counter = dict(sorted(collections.Counter(epochs).items()))
+
+    objects = counter.keys()
+    y_pos = range(len(counter))
+    y = counter.values()
+
+    plt.bar(y_pos, y, align='center', alpha=0.5)
+    plt.xticks(y_pos, objects, rotation=90)
+    plt.ylabel('Ilość tekstów')
+    plt.title('Rozkład ilości danych na epoki')
+
+    plt.show()
+
     from pprint import pprint
     pprint(counter)
 
@@ -105,9 +121,8 @@ def count_books_by_epochs():
 def main():
     # print_all_epochs()
 
-    # print_confusion_matrix()
-
-    count_books_by_epochs()
+    # count_books_by_epochs()
+    print_confusion_matrix()
 
 
 if __name__ == '__main__':
