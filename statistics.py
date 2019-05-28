@@ -74,7 +74,7 @@ def print_all_epochs():
 
 def print_confusion_matrix():
     with open(paths.stats_gird_search_path, "rb") as file:
-        grid_search, x_test, x_train, y_test, y_train = pickle.load(file)
+        grid_search, x_test, y_test = pickle.load(file)
 
     y_pred = grid_search.predict(x_test)
 
