@@ -83,7 +83,9 @@ def print_confusion_matrix():
     pprint(counter)
 
     class_names = ["Starożytność lub średniowiecze", "Renesans", "Barok", "Oświecenie", "Romantyzm", "Pozytywizm",
-                   "Modernizm", "Dwudziestolecie międzywojenne", "Współczesność", "nie dotyczy"]
+                   "Modernizm", "Dwudziestolecie międzywojenne", "Współczesność"]
+
+    # class_names = ["<1500", "(1500; 1600]", "(1600; 1700]", "(1700; 1800]", "(1800; 1900]", "(1900; 2020]", "other"]
 
     np.set_printoptions(precision=2)
 
@@ -96,6 +98,13 @@ def print_confusion_matrix():
                           title='Normalized confusion matrix')
 
     plt.show()
+
+    print("params", grid_search.cv_results_['params'])
+    print("Scores for all parameters", grid_search.cv_results_['mean_test_score'])
+    print("Best score: %0.3f" % grid_search.best_score_)
+
+    print("Score on test data set: ", grid_search.score(x_test, y_test))
+    print("Test on fragments", grid_search.score([text[:1000] for text in x_test], y_test))
 
 
 def count_books_by_epochs():
@@ -121,7 +130,7 @@ def count_books_by_epochs():
 def main():
     # print_all_epochs()
 
-    # count_books_by_epochs()
+    count_books_by_epochs()
     print_confusion_matrix()
 
 

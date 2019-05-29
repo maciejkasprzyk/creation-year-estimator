@@ -1,7 +1,6 @@
 import pickle
 from pprint import pprint
 
-from sklearn.model_selection import GridSearchCV
 import sys
 
 import paths

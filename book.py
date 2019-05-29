@@ -32,7 +32,8 @@ def construct_list_of_books():
         # done append when no text
         if txt is None:
             continue
-
+        if epoch == "nie dotyczy":
+            continue
         if birth_year is None and death_year is None:
             # print("There's no date for book", title)
             date = None
@@ -98,6 +99,24 @@ class Book:
             return "Barok"
         elif epoch == "nie dotyczy":
             return "nie dotyczy"
+        else:
+            return "other"
+
+    @property
+    def label_date(self):
+        date = self.date
+        if date <= 1500:
+            return "<1500"
+        elif 1500 < date <= 1600:
+            return "(1500; 1600]"
+        elif 1600 < date <= 1700:
+            return "(1600; 1700]"
+        elif 1700 < date <= 1800:
+            return "(1700; 1800]"
+        elif 1800 < date <= 1900:
+            return "(1800; 1900]"
+        elif 1900 < date <= 2020:
+            return "(1900; 2020]"
         else:
             return "other"
 
