@@ -1,2 +1,10 @@
 # svm-text-year-classification
-This project use SVM machine to evaluate how long ago was the text written. As a learning set it uses text with public license.
+
+## Functionality
+This program takes a text fragment and estimates its year of creation.
+
+## Kernel
+SVM used as a kernel.
+
+## Learning set
+Free books from wolnelektury.pl. 
